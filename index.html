@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form onsubmit="event.preventDefault(); getWeather()">
+        <input id="city" type="text" placeholder="enter city name">
+        <button type="submit">Search</button>
+
+
+        <div id="result"></div>
+    </form>
+
+
+    <script>
+
+        let apikey = "4969542ebab4341abc4fc3dda7c042fd";
+        async function getWeather() {
+            const city = document.getElementById("city").value;
+            if (city === "") {
+                alert("Enter city name")
+            }
+
+            try {
+                let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apikey}&units=metric`
+                let response = await fetch(url);
+                let data = await response.json()
+                displayweather(data)
+
+            }
+
+            catch (error) {
+                console.log("Error while fetching data", error)
+                alert("failed to fetch data")
+            }
+        }
+
+
+        function displayweather(data){
+
+            let citynme = data.name;
+            let windspeed = data.wind.speed;
+            let description = data.weather[0].description
+            let temperature = data.main.temp
+
+            document.getElementById("result").innerHTML = `
+            
+            <h2>city name: ${citynme}</h2>
+            <h2>wind speed: ${windspeed}</h2>
+            <h2>about: ${description}</h2>
+            <h2>temperature: ${temperature}</h2>
+        `
+        }
+    </script>
+</body>
+
+</html>
